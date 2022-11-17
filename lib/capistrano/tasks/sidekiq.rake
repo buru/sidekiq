@@ -38,10 +38,9 @@ namespace :runit do
       collect_default_sidekiq_params(array)
       collect_concurrency_sidekiq_params(array)
       collect_queues_sidekiq_params(array)
-      collect_log_sidekiq_param(array)
-      collect_pid_sidekiq_param(array)
       collect_config_sidekiq_param(array)
       collect_require_sidekiq_params(array)
+      collect_log_sidekiq_param(array) # should be the last param, as it's an output redirect
       array.compact.join(' ')
     end
 
@@ -84,7 +83,7 @@ namespace :runit do
     end
 
     def collect_log_sidekiq_param(array)
-      array << "-L #{File.join(shared_path, 'log', "sidekiq.#{sidekiq_environment}.log")}"
+      array << ">> #{File.join(shared_path, 'log', "sidekiq.#{sidekiq_environment}.log")} 2>&1"
     end
 
     def collect_pid_sidekiq_param(array)
